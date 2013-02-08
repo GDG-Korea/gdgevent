@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -61,11 +62,18 @@ func getGDGEvents(cid string, start, end time.Time) []Event {
 }
 
 func main() {
-	cid := "102751345660146384940" // chapter ID of Czech Republic Uber
+	/* cid := "102751345660146384940" // chapter ID of Czech Republic Uber */
 	/* cid := "12714242728066184635" // chapter ID for GDG Golnag Korea */
+	if len(os.Args) < 3 {
+		fmt.Printf("%s: CHAPTERID YEAR\n", os.Args[0])
+		os.Exit(1)
+	}
 
-	st, _ := time.Parse(TF_CALENDAR, "20120101")
-	et := time.Now()
+	cid := os.Args[1]
+	year := os.Args[2]
+
+	st, _ := time.Parse(TF_CALENDAR, year+"0101")
+	et, _ := time.Parse(TF_CALENDAR, year+"1231")
 	for _, e := range getGDGEvents(cid, st.UTC(), et.UTC()) {
 		e.PrintSummary()
 	}
