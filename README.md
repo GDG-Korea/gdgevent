@@ -1,7 +1,7 @@
 GDG Event
 =========
 
-GDG Event command line tool and library written in GOLANG
+A command line tool and a library written in GOLANG for GDG Event.
 
 Install
 -------
@@ -18,3 +18,8 @@ Usage
 `gdgevent` `<chapter-id>` `<year>`
 
     gdgevent 102751345660146384940 2012
+
+Authors
+---------
+ * Homin Lee <homin.lee@suapapa.net>
+ * Leonardo YongUk kIm <dalinaum@gmail.com>
