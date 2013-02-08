@@ -36,7 +36,7 @@ func main() {
 
 	cid := "102751345660146384940"
 
-	for _, e := range event.GetGDGEvents(cid, start.UTC(), end.UTC()) {
+	for _, e := range event.GetGDGEvents(cid, start, end) {
 		e.PrintSummary()
 	}
 }
