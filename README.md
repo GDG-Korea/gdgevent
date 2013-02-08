@@ -13,13 +13,36 @@ library:
 
     go get github.com/dalinaum/gdgevent/event
 
-Usage
+Command line tool usage
 -----
 `gdgevent` `<chapter-id>` `<year>`
 
     gdgevent 102751345660146384940 2012
 
-If you want to know using this library, see [command line tool's source](https://github.com/dalinaum/gdgevent/blob/master/main.go) please.
+Sample
+------
+~~~~
+package main
+
+import (
+    "github.com/dalinaum/gdgevent/event"
+	"time"
+)
+
+func main() {
+	start := time.Unix(0, 0)
+	end := time.Unix(0, 0)
+	// if you set start is equal to end, end will be ignored.
+
+	cid := "102751345660146384940"
+
+	for _, e := range event.GetGDGEvents(cid, start.UTC(), end.UTC()) {
+		e.PrintSummary()
+	}
+}
+~~~~
+
+If you want to know more, see [command line tool's source](https://github.com/dalinaum/gdgevent/blob/master/main.go) please.
 
 Authors
 ---------
