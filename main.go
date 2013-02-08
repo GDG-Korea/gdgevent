@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"gdgevent/event"
+	"github.com/dalinaum/gdgevent/event"
 	"os"
 	"time"
 )
