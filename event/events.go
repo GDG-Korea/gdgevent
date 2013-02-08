@@ -32,6 +32,13 @@ func (e Event) PrintSummary() {
 	fmt.Println(st.Format(TF_CALENDAR), "~", et.Format(TF_CALENDAR), e.Title)
 }
 
+func (e Event) GetSummary() string {
+	st, _ := time.Parse(TF_GDG_EVENT, e.Start)
+	et, _ := time.Parse(TF_GDG_EVENT, e.End)
+
+	return fmt.Sprintln(st.Format(TF_CALENDAR), "~", et.Format(TF_CALENDAR), e.Title)
+}
+
 func fatalIf(err error) {
 	if err != nil {
 		log.Fatalln(err)
