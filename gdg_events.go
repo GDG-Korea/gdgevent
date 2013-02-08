@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
 type Event struct {
@@ -19,8 +20,16 @@ type Event struct {
 	Id               string `json:"id,omitempty"`
 }
 
+const (
+	TF_GDG_EVENT = "02 Jan 2006 15:04 -0700"
+	TF_CALENDAR  = "20060102"
+)
+
 func (e Event) PrintSummary() {
-	fmt.Println(e.Start, "~", e.End, e.Title)
+	st, _ := time.Parse(TF_GDG_EVENT, e.Start)
+	et, _ := time.Parse(TF_GDG_EVENT, e.End)
+
+	fmt.Println(st.Format(TF_CALENDAR), "~", et.Format(TF_CALENDAR), e.Title)
 }
 
 func FatalIf(err error) {
@@ -29,11 +38,15 @@ func FatalIf(err error) {
 	}
 }
 
-// give strart and end in UTC milliseconds
-func getGDGEvents(cid string) []Event {
+func getGDGEvents(cid string, start, end time.Time) []Event {
+	/* log.Println(start, end) */
 	base := "https://developers.google.com/events/feed/json"
-	requestURL := base + fmt.Sprintf("?group=%s&start=0", cid)
-	log.Println(requestURL)
+	requestURL := base + fmt.Sprintf("?group=%s", cid)
+	requestURL += fmt.Sprintf("&start=%d", start.Unix())
+	if end.After(start) {
+		requestURL += fmt.Sprintf("&end=%d", end.Unix())
+	}
+	/* log.Println(requestURL) */
 
 	resp, err := http.Get(requestURL)
 	FatalIf(err)
@@ -47,11 +60,13 @@ func getGDGEvents(cid string) []Event {
 	return evts
 }
 
-
 func main() {
-	/* cid := "102751345660146384940" // chapter ID of Czech Republic Uber */
-	cid := "12714242728066184635" // chapter ID for GDG Golnag Korea
-	for _, e := range getGDGEvents(cid) {
+	cid := "102751345660146384940" // chapter ID of Czech Republic Uber
+	/* cid := "12714242728066184635" // chapter ID for GDG Golnag Korea */
+
+	st, _ := time.Parse(TF_CALENDAR, "20120101")
+	et := time.Now()
+	for _, e := range getGDGEvents(cid, st.UTC(), et.UTC()) {
 		e.PrintSummary()
 	}
 }
