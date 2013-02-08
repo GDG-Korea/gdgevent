@@ -1,4 +1,4 @@
-package main
+package event
 
 import (
 	"encoding/json"
@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -22,8 +21,8 @@ type Event struct {
 }
 
 const (
-	TF_GDG_EVENT = "02 Jan 2006 15:04 -0700"
 	TF_CALENDAR  = "20060102"
+	TF_GDG_EVENT = "02 Jan 2006 15:04 -0700"
 )
 
 func (e Event) PrintSummary() {
@@ -33,13 +32,13 @@ func (e Event) PrintSummary() {
 	fmt.Println(st.Format(TF_CALENDAR), "~", et.Format(TF_CALENDAR), e.Title)
 }
 
-func FatalIf(err error) {
+func fatalIf(err error) {
 	if err != nil {
 		log.Fatalln(err)
 	}
 }
 
-func getGDGEvents(cid string, start, end time.Time) []Event {
+func GetGDGEvents(cid string, start, end time.Time) []Event {
 	/* log.Println(start, end) */
 	base := "https://developers.google.com/events/feed/json"
 	requestURL := base + fmt.Sprintf("?group=%s", cid)
@@ -50,31 +49,13 @@ func getGDGEvents(cid string, start, end time.Time) []Event {
 	/* log.Println(requestURL) */
 
 	resp, err := http.Get(requestURL)
-	FatalIf(err)
+	fatalIf(err)
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
-	FatalIf(err)
+	fatalIf(err)
 
 	var evts []Event
 	json.Unmarshal(body, &evts)
 	return evts
-}
-
-func main() {
-	/* cid := "102751345660146384940" // chapter ID of Czech Republic Uber */
-	/* cid := "12714242728066184635" // chapter ID for GDG Golnag Korea */
-	if len(os.Args) < 3 {
-		fmt.Printf("%s: CHAPTERID YEAR\n", os.Args[0])
-		os.Exit(1)
-	}
-
-	cid := os.Args[1]
-	year := os.Args[2]
-
-	st, _ := time.Parse(TF_CALENDAR, year+"0101")
-	et, _ := time.Parse(TF_CALENDAR, year+"1231")
-	for _, e := range getGDGEvents(cid, st.UTC(), et.UTC()) {
-		e.PrintSummary()
-	}
 }
