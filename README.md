@@ -19,6 +19,8 @@ Usage
 
     gdgevent 102751345660146384940 2012
 
+If you want to know using this library, see [command line tool's source](https://github.com/dalinaum/gdgevent/blob/master/main.go) please.
+
 Authors
 ---------
  * Homin Lee <homin.lee@suapapa.net>
