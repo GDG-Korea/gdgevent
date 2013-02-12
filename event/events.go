@@ -26,17 +26,21 @@ const (
 )
 
 func (e Event) PrintSummary() {
-	st, _ := time.Parse(TF_GDG_EVENT, e.Start)
-	et, _ := time.Parse(TF_GDG_EVENT, e.End)
-
-	fmt.Println(st.Format(TF_CALENDAR), "~", et.Format(TF_CALENDAR), e.Title)
+	fmt.Println(e.GetSummary())
 }
 
 func (e Event) GetSummary() string {
-	st, _ := time.Parse(TF_GDG_EVENT, e.Start)
-	et, _ := time.Parse(TF_GDG_EVENT, e.End)
+	return fmt.Sprintln(e.GetStart(), "~", e.GetEnd(), e.Title)
+}
 
-	return fmt.Sprintln(st.Format(TF_CALENDAR), "~", et.Format(TF_CALENDAR), e.Title)
+func (e Event) GetStart() string {
+	st, _ := time.Parse(TF_GDG_EVENT, e.Start)
+	return st.Format(TF_CALENDAR)
+}
+
+func (e Event) GetEnd() string {
+	et, _ := time.Parse(TF_GDG_EVENT, e.End)
+	return et.Format(TF_CALENDAR)
 }
 
 func fatalIf(err error) {
