@@ -30,7 +30,7 @@ func (e Event) PrintSummary() {
 }
 
 func (e Event) GetSummary() string {
-	return fmt.Sprintln(e.GetStart(), "~", e.GetEnd(), e.Title)
+	return fmt.Sprint(e.GetStart(), "~", e.GetEnd(), " ",  e.Title)
 }
 
 func (e Event) GetStart() string {
